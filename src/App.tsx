@@ -1,25 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import { ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/system';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Footer from './components/Footer/Footer';
+import NavBar from './components/NavBar/NavBar';
+import Home from './pages/Home/Home';
+import darkTheme from './theme/darkTheme';
+import lightTheme from './theme/lightTheme';
+
+export const ThemeContext = React.createContext({
+    darkMode: false,
+    toggleDarkMode: () => {},
+});
+
+const projectName = 'Colors App'
+
+const App: React.FC = () => {
+  const [darkMode, setDarkMode] = React.useState(false);
+  const theme = darkMode ? darkTheme : lightTheme;
+  const toggleDarkMode = () => {
+      setDarkMode(!darkMode);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+     <ThemeProvider theme={theme}>
+            <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
+                <Router>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        minHeight="100vh"
+                    >
+                        <NavBar
+                            projectName={projectName}
+                        />
+                        <Box
+                            flex="1"
+                            style={{
+                                backgroundColor:
+                                    theme.palette.background.default,
+                                color: theme.palette.text.primary,
+                            }}
+                        >
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                            </Routes>
+                        </Box>
+                        <Footer projectName={projectName} />
+                    </Box>
+                </Router>
+            </ThemeContext.Provider>
+        </ThemeProvider>
   );
 }
 
