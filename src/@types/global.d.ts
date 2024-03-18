@@ -6,16 +6,11 @@ interface ColorsData {
     data: ColorDetails[];
 }
 
-
 interface ColorsDataState {
   loading: boolean;
   colorsData: ColorsData;
   error?: string;
 }
-
-
-
-
 
 interface ColorDetailsData {
     data: ColorDetails;

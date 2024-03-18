@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ColorsTable from "../../components/ColorsTable/ColorsTable";
 import { useGlobalDispatch, useGlobalState } from "../../helpers";
 // import { ColorsDataAction } from "../../redux/ColorsData/ColorsData.slice";
-import { ColorView } from "../ColorView";
+
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -34,8 +34,6 @@ const Home: React.FC = () => {
     return (
         <div className="home">
             <ColorsTable colors={colorsList} isLoading={isLoadingColors} />
-            <div>ODSTEP</div>
-            <ColorView/>
         </div>
     );
 };

@@ -1,11 +1,5 @@
 import { SxProps, Theme } from '@mui/system';
 
-export const tableRowStyle: SxProps<Theme> = {
-    ":hover": {
-        cursor: 'pointer',
-    }
-};
-
 export const textFieldStyle: SxProps<Theme> = {
     width: '90%',
     margin: '1rem',
