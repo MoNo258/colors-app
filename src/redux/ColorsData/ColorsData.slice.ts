@@ -14,7 +14,7 @@ const fetchColorsData = createAsyncAction(
       const response = await getColors({page, perPage, id});
       return response as ColorsData;
     } catch (error) {
-      return console.log('Error fetching data:', error);
+      return console.error('Error fetching data:', error);
     }
   }
 );
