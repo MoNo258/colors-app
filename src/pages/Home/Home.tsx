@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ColorDetailsModal from "../../components/ColorDetailsModal/ColorDetailsModal";
 import ColorsTable from '../../components/ColorsTable/ColorsTable';
 import Loader from "../../components/Loader/Loader";
+import { NotFound } from '../../components/NotFound';
 import { useGlobalDispatch, useGlobalState } from '../../helpers';
 import { ColorDetailsAction } from '../../redux/ColorDetails/ColorDetails.slice';
 import { ColorsDataAction } from '../../redux/ColorsData/ColorsData.slice';
@@ -16,6 +17,8 @@ const Home: React.FC = () => {
     const [selectedColor, setSelectedColor] = React.useState<ColorDetails | null>(null);
     const [filterText, setFilterText] = React.useState<string>('');
     const [page, setPage] = React.useState<number>(1);
+    const [notFound, setNotFound] = React.useState<boolean>(false);
+    const [wrongParam, setWrongParam] = React.useState<string>('');
     const isLoadingColors = useGlobalState((state) => state.colorsData.loading);
     const colorsData = useGlobalState((state) => state.colorsData.colorsData.data);
     const totalPagesApi = useGlobalState((state) => state.colorsData.colorsData.total_pages);
@@ -72,15 +75,17 @@ const Home: React.FC = () => {
             const { pageNumber, idNumber } = extractPageAndIdNumbers(searchParams.toString());
             
             if (Number(idNumber) > totalItems){
-                navigate('/not-found')
+                setNotFound(true);
+                setWrongParam(`Param ID=${idNumber} is wrong.`)
                 return;
             }
             if (Number(pageNumber) > totalPagesApi){
-                navigate('/not-found')
+                setNotFound(true);
+                setWrongParam(`Param PAGE=${pageNumber} is wrong.`)
                 return;
             }
         })()
-    }, [location.search, navigate, totalItems, totalPagesApi]);
+    }, [location.search, totalItems, totalPagesApi]);
 
     const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Allow only numbers
@@ -100,60 +105,65 @@ const Home: React.FC = () => {
         navigate(`?${queryParams.toString()}`);
     };
 
+    const handleResetNotFound = () => {
+        setNotFound(false);
+        setWrongParam('');
+        setFilterText('');
+    };
+
     return (
         <div className="home">
-            {isLoadingColors ? <Loader /> : colorsData && !filteredColor && (
-                <Box 
-                    display={'flex'} 
-                    flexDirection='column' 
-                    padding={1} 
-                    justifyContent='center' 
-                    alignItems='center'
-                >
-                    <TextField
-                        label="Filter by ID"
-                        value={filterText}
-                        onChange={handleFilterChange}
-                        inputProps={{ inputMode: 'numeric' }}
-                        sx={textFieldStyle}
-                    />
-                    <ColorsTable
-                        data={colorsData}
-                        handleRowClick={handleRowClick}
-                    />
-                   
-                    <Pagination
-                        count={totalPagesApi}
-                        page={page}
-                        onChange={handleChangePage}
-                        color="primary"
-                        variant="outlined"
-                        shape="rounded"
-                        sx={paginationStyle}
-                    />
-                </Box>
-            )}
-            {isLoadingColorDetails ? <Loader/> : filteredColor && (
-                <Box 
-                    display={'flex'} 
-                    flexDirection='column' 
-                    padding={1} 
-                    justifyContent='center' 
-                    alignItems='center'
-                >
-                    <TextField
-                        label="Filter by ID"
-                        value={filterText}
-                        onChange={handleFilterChange}
-                        inputProps={{ inputMode: 'numeric' }}
-                        sx={textFieldStyle}
-                    />
-                    <ColorsTable
-                        data={filteredColor && filteredColor['data']}
-                        handleRowClick={handleRowClick}
-                    />
-                </Box>
-            )}
+            <Box 
+                display={'flex'} 
+                flexDirection='column' 
+                padding={1} 
+                justifyContent='center' 
+                alignItems='center'
+            >
+                {isLoadingColors ? <Loader /> : colorsData && !filteredColor && !notFound && (
+                    <>
+                        <TextField
+                            label="Filter by ID"
+                            value={filterText}
+                            onChange={handleFilterChange}
+                            inputProps={{ inputMode: 'numeric' }}
+                            sx={textFieldStyle}
+                        />
+                        <ColorsTable
+                            data={colorsData}
+                            handleRowClick={handleRowClick}
+                        />
+
+                        <Pagination
+                            count={totalPagesApi}
+                            page={page}
+                            onChange={handleChangePage}
+                            color="primary"
+                            variant="outlined"
+                            shape="rounded"
+                            sx={paginationStyle}
+                        />
+                    </>
+                )}
+                {isLoadingColorDetails ? <Loader/> : filteredColor && !notFound && (
+                    <>
+                        <TextField
+                            label="Filter by ID"
+                            value={filterText}
+                            onChange={handleFilterChange}
+                            inputProps={{ inputMode: 'numeric' }}
+                            sx={textFieldStyle}
+                        />
+                        <ColorsTable
+                            data={filteredColor && filteredColor['data']}
+                            handleRowClick={handleRowClick}
+                        />
+                    </>
+                )}
+                {notFound && (
+                    <NotFound wrongParam={wrongParam} onResetNotFound={handleResetNotFound} />
+                )}
+            </Box>
             <ColorDetailsModal 
                 open={selectedColor !== null} 
                 onClose={handleCloseModal} 
