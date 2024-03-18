@@ -22,22 +22,17 @@ const Home: React.FC = () => {
     }, []);
 
     const handleMenuItemClick = (
-      e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-      data: any
+        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        data: any
     ) => {
-      console.log("clicked item:", data.name);
-      setActiveItem(data.name);
-    
+        console.log("clicked item:", data.name);
+        setActiveItem(data.name);
     };
 
     return (
-      <div className="home">
-        <ColorsTable colors={colorsList} isLoading={isLoadingColors} />
-        <div
-          // handleMenuItemClick={handleMenuItemClick}
-        />
-        {/* <ColorsData /> */}
-      </div>
+        <div className="home">
+            <ColorsTable colors={colorsList} isLoading={isLoadingColors} />
+        </div>
     );
 };
 

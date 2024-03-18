@@ -4,7 +4,7 @@ const darkTheme = createTheme({
     palette: {
         mode: 'dark',
         primary: {
-            main: '#dab600', // honey color
+            main: '#003A75',
         },
         secondary: {
             main: '#424242', // dark grey for main background

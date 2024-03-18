@@ -2,7 +2,6 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import { Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { colorLensIconStyles, companyNameStyles, footerStyles } from './Footer.styles';
 
 interface FooterProps {
@@ -20,8 +19,6 @@ const Footer: React.FC<FooterProps> = ({ projectName }) => {
             <Typography
                 variant="h3"
                 noWrap
-                component={NavLink}
-                to="/"
                 sx={companyNameStyles}
                 color={theme.palette.primary.main}
             >

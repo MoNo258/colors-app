@@ -4,7 +4,7 @@ const lightTheme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: '#dab600', // honey color
+            main: '#003A75',
         },
         secondary: {
             main: '#f0f0f0', // lighter grey for main background

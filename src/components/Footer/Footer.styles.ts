@@ -17,5 +17,4 @@ export const companyNameStyles: SxProps<Theme> = {
   fontWeight: 700,
   fontSize: { xs: '2rem', md: '3rem' },
   letterSpacing: { xs: '.1rem', md: '.2rem' },
-  textDecoration: 'none',
 };
