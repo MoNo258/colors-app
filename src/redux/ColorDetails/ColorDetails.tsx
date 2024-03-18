@@ -1,6 +1,6 @@
 import {
-    Card,
-    CardContent
+  Card,
+  CardContent
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ const ColorDetails: React.FC<ColorDetailsProps> = () => {
   const navigate = useNavigate();
   const dispatch = useGlobalDispatch();
   const colorDetails = useGlobalState(
-    (state) => state.colorDetails.colorDetails
+    (state) => state.colorDetails.data.data
   );
   const isLoading = useGlobalState((state) => state.colorDetails.loading);
   const idParam = window.location.pathname;

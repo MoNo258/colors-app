@@ -1,8 +1,8 @@
-import { Button, ButtonProps, Card, CardContent } from "@mui/material";
+import { ButtonProps } from "@mui/material";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 import { useGlobalDispatch, useGlobalState } from "../../helpers";
-import { ColorDetails, ColorDetailsAction } from "../../redux";
 
 
 const ColorView: React.FC = () => {
@@ -11,13 +11,13 @@ const ColorView: React.FC = () => {
   const [isDeleted, setIsDeleted] = React.useState(false);
   const dispatch = useGlobalDispatch();
   const colorDetails = useGlobalState(
-    (state) => state.colorDetails.colorDetails
+    (state) => state.colorDetails.data
   );
   const isLoading = useGlobalState((state) => state.colorDetails.loading);
 
-  React.useEffect(() => {
-    dispatch(ColorDetailsAction.fetchColorDetails(Number(idParam.slice(1))));
-  }, []);
+  // React.useEffect(() => {
+  //   dispatch(ColorDetailsAction.fetchColorDetails(Number(idParam.slice(1))));
+  // }, []);
 
   const visitHomepage = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -25,6 +25,10 @@ const ColorView: React.FC = () => {
   ) => {
     navigate(`/`);
   };
+
+  // console.log('views -> ColorView: navigate', navigate);
+  // console.log('views -> ColorView: idParam', idParam);
+  
 
   const sections = [
     { key: "Homepage", content: "Homepage", href: "/" },
@@ -34,24 +38,7 @@ const ColorView: React.FC = () => {
   return (
     <div className="userView">
       <div className="userView_card">
-        {!isDeleted ? (
-          <ColorDetails />
-        ) : (
-          <Card >
-            <CardContent>User is DELETED</CardContent>
-            <CardContent>
-              <Button
-                // loading={isLoading}
-                
-                
-                
-               
-              
-                // onButtonClick={(e, data) => visitHomepage(e, data)}
-              />
-            </CardContent>
-          </Card>
-        )}
+          {isLoading ? <Loader/> : <div>{colorDetails && colorDetails.data.color} {colorDetails && colorDetails.data.id}</div>}
       </div>
     </div>
   );

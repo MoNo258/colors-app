@@ -3,7 +3,7 @@ import { getColorDetails } from "../../api";
 import { createAsyncAction } from "../../helpers";
 
 export const initialState: ColorDetailsState = {
-  colorDetails: {} as ColorDetails,
+  data: {} as ColorDetailsData,
   loading: true,
 };
 
@@ -12,7 +12,7 @@ const fetchColorDetails = createAsyncAction(
   async (colorId: number) => {
     try {
       const response = await getColorDetails(colorId);
-      return response;
+      return response ;
     } catch (error) {
       return console.log(error); //error type can be corrected FIXME:
     }
@@ -24,9 +24,9 @@ const slice = createSlice({
   reducers: {
     setColor: (
       state,
-      action: PayloadAction<ColorDetailsState["colorDetails"]>
+      action: PayloadAction<ColorDetailsState["data"]>
     ) => {
-      state.colorDetails = action.payload;
+      state.data = action.payload;
     },
     setLoading: (
       state,
@@ -41,7 +41,7 @@ const slice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchColorDetails.fulfilled, (state, { payload }) => {
-      state.colorDetails = payload as ColorDetails;
+      state.data = payload as ColorDetailsData;
       state.loading = false;
     });
     builder.addCase(fetchColorDetails.rejected, (state, action) => {

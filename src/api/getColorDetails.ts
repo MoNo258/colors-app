@@ -7,7 +7,7 @@ export async function getColorDetails(colorId: number) {
       },
     });
     if (response.status === 200) {
-      return (await response.json()) as ColorDetails;
+      return (await response.json()) as ColorDetailsData;
     } else {
       throw Error(`${response.status}: ${response.statusText}`);
     }

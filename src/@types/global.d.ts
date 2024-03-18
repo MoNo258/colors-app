@@ -6,13 +6,6 @@ interface ColorsData {
     data: ColorDetails[];
 }
 
-interface ColorDetails {
-    id: number;
-    name: string;
-    year: number;
-    color: string;
-    pantone_value: string;
-}
 
 interface ColorsDataState {
   loading: boolean;
@@ -21,13 +14,30 @@ interface ColorsDataState {
 }
 
 
-interface ColorsListState {
-  loading: boolean;
-  colorsList: ColorsData['data'];
-  error?: string;
+
+
+
+interface ColorDetailsData {
+    data: ColorDetails;
 }
+
+interface ColorDetails {
+    id: number;
+    name: string;
+    year: number;
+    color: string;
+    pantone_value: string;
+}
+
 interface ColorDetailsState {
   loading: boolean;
-  colorDetails: ColorDetails;
+  data: ColorDetailsData;
   error?: string;
 }
+
+
+interface FetchParams {
+  page?: number;
+  perPage?: number;
+  id?: string;
+} 

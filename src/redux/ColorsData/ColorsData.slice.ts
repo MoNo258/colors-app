@@ -9,12 +9,12 @@ export const initialState: ColorsDataState = {
 
 const fetchColorsData = createAsyncAction(
   "request-ColorsData/fetchColorsData",
-  async () => {
+  async ({page, perPage, id}: FetchParams) => {
     try {
-      const response = await getColors();
-      return response;
+      const response = await getColors({page, perPage, id});
+      return response as ColorsData;
     } catch (error) {
-      return console.log(error); //error type can be corrected FIXME:
+      return console.log('Error fetching data:', error);
     }
   }
 );
