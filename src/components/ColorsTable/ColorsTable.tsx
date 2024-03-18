@@ -17,26 +17,38 @@ interface ColorsTableProps {
 
 const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
     const dispatch = useGlobalDispatch();
-
-    
+    const location = useLocation();
+    const navigate = useNavigate();
     const [selectedColor, setSelectedColor] = useState<ColorDetails | null>(null);
     const [filterText, setFilterText] = useState<number>(0);
     const [page, setPage] = useState<number>(1);
     const isLoadingColors = useGlobalState((state) => state.colorsData.loading);
-    const totalItems = useGlobalState((state) => state.colorsData.colorsData.total);
     const colorsData = useGlobalState((state) => state.colorsData.colorsData.data);
     const totalPagesApi = useGlobalState((state) => state.colorsData.colorsData.total_pages);
     const itemsPerPage = 9;
     const isLoadingColorDetails = useGlobalState((state) => state.colorDetails.loading);
     const filteredColor = useGlobalState((state) => state.colorDetails.data);
 
+
+
+
+    const errorColors = useGlobalState((state) => state.colorsData.error);
+    const errorColorDetails = useGlobalState((state) => state.colorDetails.error);
+
+    const [activeItem, setActiveItem] = React.useState<string | undefined>(
+        "devices"
+    );
+
+            console.log('II isLoadingColors',isLoadingColors);
+            console.log('II errorColors',errorColors);
+            console.log('VV isLoadingColorDetails',isLoadingColorDetails);
+            console.log('VV errorColorDetails',errorColorDetails);
+
     const [clickedId, setClickedId] = useState<number | null>(null);
 
 
     React.useEffect(() => {
         dispatch(ColorsDataAction.fetchColorsData({page, itemsPerPage, filterText} as FetchParams));
-
-        // setTotalPages(Math.ceil(totalItems / itemsPerPage));
     }, [page, itemsPerPage]);
 
     React.useEffect(() => {
@@ -44,42 +56,23 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
     }, [filterText]);
 
 
-        console.log('filterText',filterText);
-        console.log('page',page);
-        // console.log('totalPages',totalPages);
-        // console.log('totalPagesApi',totalPagesApi);
-        console.log('totalItems',totalItems);
-        // console.log('itemsPerPageApi',itemsPerPageApi);
-        // console.log('products',products);
-        console.log('colorsData',colorsData);
-        console.log('clickedId',clickedId);
-
-
-        // console.log('!!!!!');
-        // console.log(' Array.isArray(colorsData)', Array.isArray(colorsData));
-        // console.log(' Array.isArray(filteredColor.data)', Array.isArray(filteredColor && filteredColor.data));
 
 
 
 
-        console.log('isLoadingColorDetails',isLoadingColorDetails);
-        console.log('filterText',filterText);
-        console.log('isLoadingColorDetails',isLoadingColorDetails);
-        console.log('filteredColor',filteredColor);
-        console.log('filteredColor.color',filteredColor && filteredColor.data);
-        console.log('filteredColor.id',filteredColor && filteredColor.data);
-        console.log('filteredColor.name',filteredColor && filteredColor.data);
+    React.useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const pageParam = queryParams.get('page');
+        const filterParam = queryParams.get('id');
+    
+        if (pageParam) {
+            setPage(Number(pageParam));
+        }
 
-
-    const location = useLocation();
-    // const history = useHistory();
-    const navigate = useNavigate();
-    // console.log('location',location);
-    // console.log('location.search',location.search);
-    // console.log('navigate',navigate);
-    // console.log('filterText',filterText);
-    // console.log('page',page);
-    // console.log('clickedId',clickedId);
+        if (filterParam) {
+            setFilterText(Number(filterParam));
+        }
+    }, [location.search]);
     
 
     const handleRowClick = (color: ColorDetails) => {
@@ -96,10 +89,18 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
         const filteredValue = event.target.value.replace(/[^\d]/g, '');
         setFilterText(Number(filteredValue));
         setPage(1);
+
+        const queryParams = new URLSearchParams(location.search);
+        queryParams.set('id', filteredValue);
+        navigate(`?${queryParams.toString()}`);
     };
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage);
+
+        const queryParams = new URLSearchParams(location.search);
+        queryParams.set('page', String(newPage));
+        navigate(`?${queryParams.toString()}`);
     };
 
     return (

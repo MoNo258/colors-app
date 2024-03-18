@@ -1,47 +1,28 @@
-import Button, { ButtonProps } from "@mui/material/Button";
+import { Box, Typography } from '@mui/material';
+import { ButtonProps } from "@mui/material/Button";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-
-// export const NotFoundStyled = styled.div`
-//   padding: 2rem;
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-//   & .header.notFound_header {
-//     font-size: 100px;
-//     font-weight: bold;
-//   }
-//   & .notFound_desc {
-//     font-size: 30px;
-//     font-weight: bold;
-//   }
-// `;
+import { Link, useNavigate } from "react-router-dom";
 
 const NotFound: React.FC = () => {
-  const navigate = useNavigate();
-  const visitHomepage = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    data: ButtonProps
-  ) => {
-    navigate(`/`);
-  };
-  return (
-    <div className="notFound">
-      {/* <Header as="h1" color="blue" className="notFound_header">
-        OOPS...
-      </Header> */}
-      <p className="notFound_desc">
-        We can't find the page you're looking for.
-      </p>
-      {/* <Button
-            title="Visit homepage"
-            color="primary"
-            onClick={(e, data) => visitHomepage(e, data)}
-      /> */}
-      <Button>Visit homepage</Button>
-    </div>
+    const navigate = useNavigate();
+    const visitHomepage = (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        data: ButtonProps
+    ) => {
+        navigate(`/`);
+    };
+    return (
+        <Box textAlign="center" mt={10}>
+            <Typography variant="h4" gutterBottom>
+                Page Not Found
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                The page you are looking for does not exist.
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                Go back to <Link to="/">Home</Link>.
+            </Typography>
+        </Box>
   );
 };
 

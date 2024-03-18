@@ -5,6 +5,7 @@ import { createAsyncAction } from "../../helpers";
 export const initialState: ColorDetailsState = {
   data: {} as ColorDetailsData,
   loading: true,
+  error: '',
 };
 
 const fetchColorDetails = createAsyncAction(
@@ -14,7 +15,7 @@ const fetchColorDetails = createAsyncAction(
       const response = await getColorDetails(colorId);
       return response ;
     } catch (error) {
-      return console.log(error); //error type can be corrected FIXME:
+      return console.error('Error fetching data:',error);
     }
   }
 );
@@ -33,6 +34,12 @@ const slice = createSlice({
       { payload }: PayloadAction<ColorDetailsState["loading"]>
     ) => {
       state.loading = payload;
+    },
+    setError: (
+      state,
+      { payload }: PayloadAction<ColorDetailsState["error"]>
+    ) => {
+      state.error = payload;
     },
   },
 
