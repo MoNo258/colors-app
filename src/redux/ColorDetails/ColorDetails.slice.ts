@@ -35,12 +35,6 @@ const slice = createSlice({
     ) => {
       state.loading = payload;
     },
-    setError: (
-      state,
-      { payload }: PayloadAction<ColorDetailsState["error"]>
-    ) => {
-      state.error = payload;
-    },
   },
 
   extraReducers: (builder) => {

@@ -20,44 +20,23 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [selectedColor, setSelectedColor] = useState<ColorDetails | null>(null);
-    const [filterText, setFilterText] = useState<number>(0);
+    const [filterText, setFilterText] = useState<string>('');
     const [page, setPage] = useState<number>(1);
     const isLoadingColors = useGlobalState((state) => state.colorsData.loading);
     const colorsData = useGlobalState((state) => state.colorsData.colorsData.data);
     const totalPagesApi = useGlobalState((state) => state.colorsData.colorsData.total_pages);
-    const itemsPerPage = 9;
+    const totalItems = useGlobalState((state) => state.colorsData.colorsData.total);
+    const itemsPerPage = 5;
     const isLoadingColorDetails = useGlobalState((state) => state.colorDetails.loading);
     const filteredColor = useGlobalState((state) => state.colorDetails.data);
-
-
-
-
-    const errorColors = useGlobalState((state) => state.colorsData.error);
-    const errorColorDetails = useGlobalState((state) => state.colorDetails.error);
-
-    const [activeItem, setActiveItem] = React.useState<string | undefined>(
-        "devices"
-    );
-
-            console.log('II isLoadingColors',isLoadingColors);
-            console.log('II errorColors',errorColors);
-            console.log('VV isLoadingColorDetails',isLoadingColorDetails);
-            console.log('VV errorColorDetails',errorColorDetails);
-
-    const [clickedId, setClickedId] = useState<number | null>(null);
-
 
     React.useEffect(() => {
         dispatch(ColorsDataAction.fetchColorsData({page, itemsPerPage, filterText} as FetchParams));
     }, [page, itemsPerPage]);
 
     React.useEffect(() => {
-        dispatch(ColorDetailsAction.fetchColorDetails((filterText)));
+        dispatch(ColorDetailsAction.fetchColorDetails((Number(filterText))));
     }, [filterText]);
-
-
-
-
 
 
     React.useEffect(() => {
@@ -70,26 +49,49 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
         }
 
         if (filterParam) {
-            setFilterText(Number(filterParam));
+            setFilterText((filterParam));
         }
     }, [location.search]);
-    
 
     const handleRowClick = (color: ColorDetails) => {
         setSelectedColor(color);
-        setClickedId(color.id)
     };
 
     const handleCloseModal = () => {
         setSelectedColor(null);
     };
 
+    const extractPageAndIdNumbers = (url: string): { pageNumber: number | null, idNumber: number | null } => {
+        const urlSearchParams = new URLSearchParams(url);
+        const pageParam = urlSearchParams.get('page');
+        const idParam = urlSearchParams.get('id');
+
+        const pageNumber = pageParam ? Number(pageParam) : null;
+        const idNumber = idParam ? Number(idParam) : null;
+
+        return { pageNumber, idNumber };
+    };
+
+    React.useEffect(() => {
+        (function() {
+            const searchParams = new URLSearchParams(location.search);
+            const { pageNumber, idNumber } = extractPageAndIdNumbers(searchParams.toString());
+            
+            if (Number(idNumber) > totalItems){
+                navigate('/not-found')
+                return;
+            }
+            if (Number(pageNumber) > totalPagesApi){
+                navigate('/not-found')
+                return;
+            }
+        })()
+    }, [location.search, navigate, totalItems, totalPagesApi]);
+
     const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // Allow only numbers
         const filteredValue = event.target.value.replace(/[^\d]/g, '');
-        setFilterText(Number(filteredValue));
-        setPage(1);
-
+        setFilterText((filteredValue));
         const queryParams = new URLSearchParams(location.search);
         queryParams.set('id', filteredValue);
         navigate(`?${queryParams.toString()}`);
@@ -97,8 +99,9 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage);
-
+        setFilterText('')
         const queryParams = new URLSearchParams(location.search);
+        queryParams.set('id', '');
         queryParams.set('page', String(newPage));
         navigate(`?${queryParams.toString()}`);
     };
@@ -119,7 +122,6 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
                         onChange={handleFilterChange}
                         inputProps={{ inputMode: 'numeric' }}
                         sx={textFieldStyle}
-                        autoFocus
                     />
                     <Table
                         data={colorsData}

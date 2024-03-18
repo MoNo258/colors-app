@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer';
 import NavBar from './components/NavBar/NavBar';
 import Home from './pages/Home/Home';
+import NotFound from './pages/NotFound/NotFound';
 import darkTheme from './theme/darkTheme';
 import lightTheme from './theme/lightTheme';
 
@@ -44,6 +45,7 @@ const App: React.FC = () => {
                             }}
                         >
                             <Routes>
+                                <Route path='*' element={<NotFound />}/>
                                 <Route path="/" element={<Home />} />
                             </Routes>
                         </Box>

@@ -5,7 +5,6 @@ import ColorsTable from "../../components/ColorsTable/ColorsTable";
 import { useGlobalDispatch, useGlobalState } from "../../helpers";
 // import { ColorsDataAction } from "../../redux/ColorsData/ColorsData.slice";
 import { ColorView } from "../ColorView";
-import { NotFound } from "../NotFound";
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -23,15 +22,6 @@ const Home: React.FC = () => {
         "devices"
     );
 
-    // console.log('II isLoadingColors',isLoadingColors);
-    // console.log('II errorColors',errorColors);
-    // console.log('VV isLoadingColorDetails',isLoadingColorDetails);
-    // console.log('VV errorColorDetails',errorColorDetails);
-    
-
-    // React.useEffect(() => {
-    //     dispatch(ColorsDataAction.fetchColorsData({}));
-    // }, []);
 
     const handleMenuItemClick = (
         e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -46,7 +36,6 @@ const Home: React.FC = () => {
             <ColorsTable colors={colorsList} isLoading={isLoadingColors} />
             <div>ODSTEP</div>
             <ColorView/>
-            <NotFound/>
         </div>
     );
 };
