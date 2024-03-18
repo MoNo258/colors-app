@@ -1,4 +1,4 @@
-import { Box, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Box, Pagination, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useGlobalDispatch, useGlobalState } from '../../helpers';
@@ -6,7 +6,8 @@ import { ColorDetailsAction } from '../../redux/ColorDetails/ColorDetails.slice'
 import { ColorsDataAction } from '../../redux/ColorsData/ColorsData.slice';
 import ColorDetailsModal from '../ColorDetailsModal/ColorDetailsModal';
 import Loader from '../Loader/Loader';
-import { paginationStyle, tableRowStyle, textFieldStyle } from './ColorsTable.styles';
+import Table from '../Table/Table';
+import { paginationStyle, textFieldStyle } from './ColorsTable.styles';
 
 
 interface ColorsTableProps {
@@ -54,14 +55,20 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
         console.log('clickedId',clickedId);
 
 
+        // console.log('!!!!!');
+        // console.log(' Array.isArray(colorsData)', Array.isArray(colorsData));
+        // console.log(' Array.isArray(filteredColor.data)', Array.isArray(filteredColor && filteredColor.data));
+
+
+
 
         console.log('isLoadingColorDetails',isLoadingColorDetails);
         console.log('filterText',filterText);
         console.log('isLoadingColorDetails',isLoadingColorDetails);
         console.log('filteredColor',filteredColor);
-        console.log('filteredColor.color',filteredColor && filteredColor.data.color);
-        console.log('filteredColor.id',filteredColor && filteredColor.data.id);
-        console.log('filteredColor.name',filteredColor && filteredColor.data.name);
+        console.log('filteredColor.color',filteredColor && filteredColor.data);
+        console.log('filteredColor.id',filteredColor && filteredColor.data);
+        console.log('filteredColor.name',filteredColor && filteredColor.data);
 
 
     const location = useLocation();
@@ -111,33 +118,13 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
                         onChange={handleFilterChange}
                         inputProps={{ inputMode: 'numeric' }}
                         sx={textFieldStyle}
+                        autoFocus
                     />
-                
-                    <TableContainer component={Paper}>
-                        <Table aria-label="product table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Year</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {colorsData.map((color) => (
-                                        <TableRow 
-                                            key={color.id} 
-                                            onClick={() => handleRowClick(color)} 
-                                            style={{ backgroundColor: color.color }}
-                                            sx={tableRowStyle}
-                                        >
-                                            <TableCell>{color.id}</TableCell>
-                                            <TableCell>{color.name}</TableCell>
-                                            <TableCell>{color.year}</TableCell>
-                                        </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Table
+                        data={colorsData}
+                        handleRowClick={handleRowClick}
+                    />
+                   
                     <Pagination
                         count={totalPagesApi}
                         page={page}
@@ -164,30 +151,10 @@ const ColorsTable: React.FC<ColorsTableProps> = ({ colors, isLoading }) => {
                         inputProps={{ inputMode: 'numeric' }}
                         sx={textFieldStyle}
                     />
-                
-                    <TableContainer component={Paper}>
-                        <Table aria-label="product table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Year</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow 
-                                    key={filteredColor.data.id}
-                                    onClick={() => handleRowClick(filteredColor.data)} 
-                                    style={{ backgroundColor: filteredColor.data.color }}
-                                    sx={tableRowStyle}
-                                >
-                                    <TableCell>{filteredColor.data.id}</TableCell>
-                                    <TableCell>{filteredColor.data.name}</TableCell>
-                                    <TableCell>{filteredColor.data.year}</TableCell>
-                                </TableRow>
-                            </TableBody>     
-                        </Table>
-                    </TableContainer>
+                    <Table
+                        data={filteredColor && filteredColor['data']}
+                        handleRowClick={handleRowClick}
+                    />
                 </Box>
             )}
             <ColorDetailsModal 
