@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/colors-app/static/js/main.1d04b3ac.js",
+    "static/js/453.55006e96.chunk.js": "/colors-app/static/js/453.55006e96.chunk.js",
+    "index.html": "/colors-app/index.html",
+    "main.1d04b3ac.js.map": "/colors-app/static/js/main.1d04b3ac.js.map",
+    "453.55006e96.chunk.js.map": "/colors-app/static/js/453.55006e96.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.1d04b3ac.js"
+  ]
+}
