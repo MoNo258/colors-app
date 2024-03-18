@@ -29,6 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -50,6 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@types/redux-logger": "^3.0.13"
+    "@types/redux-logger": "^3.0.13",
+    "gh-pages": "^6.1.1"
   }
 }
