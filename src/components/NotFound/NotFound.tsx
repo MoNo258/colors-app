@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import Button from "@mui/material/Button";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface NotFoundProps {
     wrongParam: string;
@@ -10,9 +10,11 @@ interface NotFoundProps {
 
 const NotFound: React.FC<NotFoundProps> = ({ wrongParam, onResetNotFound }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+
     const resetParams = () => {
-        onResetNotFound();
-        navigate(`/?page=1`);
+        onResetNotFound();        
+        navigate(`${location.pathname}?page=1`);
     };
 
     return (
